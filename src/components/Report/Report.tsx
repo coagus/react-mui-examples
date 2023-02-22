@@ -3,12 +3,6 @@ import {
   Autocomplete,
   Box,
   Checkbox,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
   Toolbar,
   Typography,
@@ -122,20 +116,6 @@ export const Report: FC = () => {
           />
         )}
       </Toolbar>
-
-      {main && main?.subList && (
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Option</TableCell>
-                <TableCell align='right'>Value</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody></TableBody>
-          </Table>
-        </TableContainer>
-      )}
     </Box>
   )
 }

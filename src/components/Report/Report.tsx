@@ -9,23 +9,23 @@ import {
 } from '@mui/material'
 import { FC, useState } from 'react'
 
-interface subType {
+interface SubType {
   id: number
   name: string
 }
 
-interface mainType {
+interface MainType {
   id: number
   name: string
-  subList: subType[]
+  subList: SubType[]
 }
 
-interface optionCostType {
+interface OptionCostType {
   optionId: number
   value: number
 }
 
-const mainList: mainType[] = [
+const mainList: MainType[] = [
   {
     id: 1,
     name: 'Christian',
@@ -60,7 +60,7 @@ const mainList: mainType[] = [
   },
 ]
 
-const optionCost: optionCostType[] = [
+const optionCost: OptionCostType[] = [
   { optionId: 1, value: 15 },
   { optionId: 2, value: 25 },
   { optionId: 3, value: 32 },
@@ -72,7 +72,8 @@ const optionCost: optionCostType[] = [
 ]
 
 export const Report: FC = () => {
-  const [main, setMain] = useState<mainType | null>(null)
+  const [main, setMain] = useState<MainType | null>(null)
+  const [sub, setSub] = useState<SubType[]>([])
 
   return (
     <Box sx={{ m: 4 }}>
@@ -80,23 +81,25 @@ export const Report: FC = () => {
       <Toolbar sx={{ py: 3 }}>
         <Autocomplete
           id='main'
+          disablePortal
           options={mainList}
-          getOptionLabel={(option: mainType) => option.name}
+          getOptionLabel={(option: MainType) => option.name}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           renderInput={(params) => <TextField {...params} label='Main' />}
-          disablePortal
-          sx={{ width: 300 }}
-          onChange={(event, value: mainType | null) => {
+          onChange={(_, value: MainType | null) => {
             setMain(value)
+            setSub(value != null ? value.subList : [])
           }}
+          sx={{ width: 300 }}
         />
         {main && (
           <Autocomplete
+            id='sub'
             multiple
             limitTags={2}
-            id='sub'
-            options={main.subList}
-            getOptionLabel={(option: subType) => option.name}
+            options={sub}
+            value={sub}
+            getOptionLabel={(option: SubType) => option.name}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             renderInput={(params) => (
               <TextField {...params} label='Sub' placeholder='Sub Selected' />
@@ -112,6 +115,9 @@ export const Report: FC = () => {
                 {option.name}
               </li>
             )}
+            onChange={(_, newValue: SubType[] | null) => {
+              if (newValue != null) setSub(newValue)
+            }}
             sx={{ width: 400, mx: 2 }}
           />
         )}
